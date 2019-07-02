@@ -18,6 +18,7 @@ class Meetup extends Model {
   }
 
   static associate(models) {
+    this.hasMany(models.Subscription);
     this.belongsTo(models.User, { foreingKey: 'user_id', as: 'user' });
     this.belongsTo(models.File, { foreingKey: 'file_id', as: 'file' });
   }
