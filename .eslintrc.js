@@ -4,6 +4,13 @@ module.exports = {
     node: true,
   },
   extends: ['airbnb-base', 'prettier'],
+  settings: {
+    'import/resolver': {
+      node: {
+        paths: ['src'],
+      },
+    },
+  },
   plugins: ['prettier'],
   globals: {
     Atomics: 'readonly',
