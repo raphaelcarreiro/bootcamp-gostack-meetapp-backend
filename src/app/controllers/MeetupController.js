@@ -1,16 +1,27 @@
 import * as Yup from 'yup';
-import { isBefore, parseISO } from 'date-fns';
+import { isBefore, parseISO, endOfDay, startOfDay } from 'date-fns';
+import { Op } from 'sequelize';
 import Meetup from '../models/Meetup';
+import File from '../models/File';
 import User from '../models/User';
+import Queue from '../../lib/Queue';
+import CancellationMail from '../jobs/CancellationMail';
 
 class MeetupController {
   async index(req, res) {
     const page = req.query.page ? req.query.page : 1;
+    const { date } = req.query;
+    const where = {};
+
+    if (date) {
+      const parsedDate = parseISO(date);
+      where.date = {
+        [Op.between]: [startOfDay(parsedDate), endOfDay(parsedDate)],
+      };
+    }
 
     const meetups = await Meetup.findAll({
-      where: {
-        user_id: req.userId,
-      },
+      where,
       order: ['date'],
       attributes: ['id', 'title', 'description', 'location', 'date', 'file_id'],
       limit: 20,
@@ -20,6 +31,11 @@ class MeetupController {
           model: User,
           as: 'user',
           attributes: ['id', 'name', 'email'],
+        },
+        {
+          model: File,
+          as: 'file',
+          attributes: ['id', 'name', 'path', 'url'],
         },
       ],
     });
@@ -63,7 +79,15 @@ class MeetupController {
   }
 
   async destroy(req, res) {
-    const meetup = await Meetup.findByPk(req.params.id);
+    const meetup = await Meetup.findByPk(req.params.id, {
+      include: [
+        {
+          model: User,
+          as: 'user',
+          attributes: ['name', 'email'],
+        },
+      ],
+    });
 
     if (!meetup) {
       return res.status(404).json({
@@ -85,7 +109,19 @@ class MeetupController {
 
     await meetup.destroy();
 
-    return res.json();
+    await Queue.add(CancellationMail.key, { meetup });
+
+    const { id, title, description, location, user_id, user, file_id } = meetup;
+
+    return res.json({
+      id,
+      title,
+      description,
+      location,
+      user_id,
+      user,
+      file_id,
+    });
   }
 
   async update(req, res) {

@@ -1,30 +1,30 @@
 Arguments: 
-  C:\Program Files\nodejs\node.exe C:\Program Files (x86)\Yarn\bin\yarn.js add date-fns
+  C:\Program Files\nodejs\node.exe C:\Program Files (x86)\Yarn\bin\yarn.js add dotev
 
 PATH: 
-  C:\ProgramData\DockerDesktop\version-bin;C:\Program Files\Docker\Docker\Resources\bin;C:\Python27\;C:\Python27\Scripts;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files\PuTTY\;C:\xampp\php;C:\ProgramData\ComposerSetup\bin;C:\Program Files\nodejs\;C:\ProgramData\chocolatey\bin;C:\Program Files\Java\jdk1.8.0_211\bin;C:\Program Files\Git\cmd;C:\Program Files (x86)\Yarn\bin\;C:\Users\Raphael M Carreiro\AppData\Local\Microsoft\WindowsApps;C:\Users\Raphael M Carreiro\AppData\Roaming\Composer\vendor\bin;C:\Users\Raphael M Carreiro\AppData\Roaming\npm;C:\Users\Raphael M Carreiro\AppData\Local\Programs\Microsoft VS Code\bin;C:\android\sdk\platform-tools;C:\android\sdk\tools;;C:\Users\Raphael M Carreiro\AppData\Local\hyper\app-3.0.2\resources\bin;C:\Users\Raphael M Carreiro\AppData\Local\Yarn\bin
+  C:\ProgramData\DockerDesktop\version-bin;C:\Program Files\Docker\Docker\Resources\bin;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\nodejs\;C:\Program Files\Git\cmd;C:\ProgramData\chocolatey\bin;C:\Program Files (x86)\Yarn\bin\;C:\Users\rapha\AppData\Local\Microsoft\WindowsApps;C:\Users\rapha\AppData\Roaming\npm;C:\xampp\php;C:\Users\rapha\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\rapha\AppData\Local\Yarn\bin
 
 Yarn version: 
   1.16.0
 
 Node version: 
-  11.13.0
+  10.16.0
 
 Platform: 
   win32 x64
 
 Trace: 
-  Error: https://registry.yarnpkg.com/date-fns/-/date-fns-1.30.1.tgz: Request failed "502 Bad Gateway"
-      at ResponseError.ExtendableBuiltin (C:\Program Files (x86)\Yarn\lib\cli.js:696:66)
-      at new ResponseError (C:\Program Files (x86)\Yarn\lib\cli.js:802:124)
-      at Request.<anonymous> (C:\Program Files (x86)\Yarn\lib\cli.js:65270:16)
-      at Request.emit (events.js:193:13)
-      at Request.module.exports.Request.onRequestResponse (C:\Program Files (x86)\Yarn\lib\cli.js:130467:10)
-      at ClientRequest.emit (events.js:198:15)
-      at HTTPParser.parserOnIncomingClient [as onIncoming] (_http_client.js:560:21)
-      at HTTPParser.parserOnHeadersComplete (_http_common.js:113:17)
-      at TLSSocket.socketOnData (_http_client.js:447:20)
-      at TLSSocket.emit (events.js:193:13)
+  Error: https://registry.yarnpkg.com/dotev: Not found
+      at Request.params.callback [as _callback] (C:\Program Files (x86)\Yarn\lib\cli.js:65200:18)
+      at Request.self.callback (C:\Program Files (x86)\Yarn\lib\cli.js:129590:22)
+      at Request.emit (events.js:198:13)
+      at Request.<anonymous> (C:\Program Files (x86)\Yarn\lib\cli.js:130562:10)
+      at Request.emit (events.js:198:13)
+      at IncomingMessage.<anonymous> (C:\Program Files (x86)\Yarn\lib\cli.js:130484:12)
+      at Object.onceWrapper (events.js:286:20)
+      at IncomingMessage.emit (events.js:203:15)
+      at endReadableNT (_stream_readable.js:1129:12)
+      at process._tickCallback (internal/process/next_tick.js:63:19)
 
 npm manifest: 
   {
@@ -34,6 +34,7 @@ npm manifest:
     "license": "MIT",
     "dependencies": {
       "bcrypt": "^3.0.6",
+      "date-fns": "^2.0.0-beta.2",
       "express": "^4.17.1",
       "jsonwebtoken": "^8.5.1",
       "multer": "^1.4.1",
@@ -44,7 +45,7 @@ npm manifest:
     },
     "scripts": {
       "dev": "nodemon src/server.js",
-      "debug": "nodemon --debug src/server.js"
+      "debug": "node --inspect -r sucrase/register src/server.js"
     },
     "devDependencies": {
       "eslint": "^5.16.0",
@@ -668,6 +669,11 @@ Lockfile:
     dependencies:
       es5-ext "^0.10.50"
       type "^1.0.1"
+  
+  date-fns@^2.0.0-beta.2:
+    version "2.0.0-beta.2"
+    resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-2.0.0-beta.2.tgz#ccd556df832ef761baa88c600f53d2e829245999"
+    integrity sha512-4cicZF707RNerr3/Q3CcdLo+3OHMCfrRXE7h5iFgn7AMvX07sqKLxSf8Yp+WJW5bvKr2cy9/PkctXLv4iFtOaA==
   
   debug@2.6.9, debug@^2.2.0, debug@^2.3.3, debug@^2.6.8, debug@^2.6.9:
     version "2.6.9"

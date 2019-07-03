@@ -4,6 +4,38 @@ import Subscription from '../models/Subscription';
 import Meetup from '../models/Meetup';
 
 class SubscriptionController {
+  async index(req, res) {
+    const meetUps = await Meetup.findAll({
+      where: {
+        date: {
+          [Op.gt]: new Date(),
+        },
+      },
+      attributes: [
+        'id',
+        'title',
+        'description',
+        'location',
+        'date',
+        'user_id',
+        'file_id',
+      ],
+      include: [
+        {
+          model: Subscription,
+          as: 'subscription',
+          where: {
+            user_id: req.userId,
+          },
+          attributes: ['created_at', 'user_id'],
+        },
+      ],
+      order: ['date'],
+    });
+
+    return res.json(meetUps);
+  }
+
   async store(req, res) {
     const meetUp = await Meetup.findByPk(req.params.meetUpId);
 
@@ -39,8 +71,18 @@ class SubscriptionController {
     subscription = await Subscription.findOne({
       where: {
         user_id: req.userId,
-        [Op.between]: [startOfHour(meetUp.date), endOfHour(meetUp.date)],
       },
+      include: [
+        {
+          model: Meetup,
+          as: 'meetup',
+          where: {
+            date: {
+              [Op.between]: [startOfHour(meetUp.date), endOfHour(meetUp.date)],
+            },
+          },
+        },
+      ],
     });
 
     if (subscription) {
