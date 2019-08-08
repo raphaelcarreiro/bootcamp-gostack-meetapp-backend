@@ -43,6 +43,28 @@ class MeetupController {
     return res.json(meetups);
   }
 
+  async show(req, res) {
+    const { id } = req.params;
+
+    const meetup = await Meetup.findByPk(id, {
+      include: [
+        {
+          model: File,
+          as: 'file',
+          attributes: ['id', 'name', 'path', 'url'],
+        },
+      ],
+    });
+
+    if (!meetup) {
+      return res.status(404).json({
+        error: 'Meetup not found',
+      });
+    }
+
+    return res.json(meetup);
+  }
+
   async store(req, res) {
     const schema = Yup.object().shape({
       title: Yup.string().required(),
@@ -150,8 +172,14 @@ class MeetupController {
         .json({ error: 'It is not possible update a past meetup' });
     }
 
-    const { title, description, location, date } = await meetup.update(
-      req.body
+    const { title, description, location, date, file_id } = await meetup.update(
+      {
+        title: req.body.title,
+        description: req.body.description,
+        date: req.body.date,
+        location: req.body.location,
+        fileId: req.body.file_id,
+      }
     );
 
     return res.json({
@@ -159,6 +187,7 @@ class MeetupController {
       description,
       location,
       date,
+      file_id,
     });
   }
 }
